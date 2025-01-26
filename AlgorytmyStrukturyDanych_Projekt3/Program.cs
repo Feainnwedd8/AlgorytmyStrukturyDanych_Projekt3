@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 class Program
 {
@@ -9,11 +10,11 @@ class Program
             { 0, 1, 1, 0, 0, 0, 0, 1 },
             { 1, 0, 0, 1, 1, 0, 0, 0 },
             { 2, 1, 0, 0, 1, 0, 0, 0 },
-            { 3, 0, 0, 0, 1, 1, 0, 0 }, 
+            { 3, 0, 0, 0, 1, 1, 0, 0 },
             { 4, 0, 1, 1, 0, 0, 1, 0 },
-            { 5, 0, 0, 1, 0, 0, 0, 1 }, 
-            { 6, 0, 0, 0, 1, 0, 0, 0 }, 
-            { 7, 0, 0, 0, 0, 1, 0, 0 }  
+            { 5, 0, 0, 1, 0, 0, 0, 1 },
+            { 6, 0, 0, 0, 1, 0, 0, 0 },
+            { 7, 0, 0, 0, 0, 1, 0, 0 }
         };
 
         Console.WriteLine("Graf nieskierowany:");
@@ -61,39 +62,73 @@ class Program
 
         if (choice == 1)
         {
-            bool[] visited = new bool[graph.GetLength(0)];
-            int[] path = new int[graph.GetLength(0)];
-            int pathIndex = 0;
+            double[] Tsuma = new double[12];
 
-            Console.WriteLine("Wykonanie DFS:");
-            bool found = DFS(graph, 0, visited, path, ref pathIndex);
+            for (int i = 0; i < 12; i++)
+            {
+                bool[] visited = new bool[graph.GetLength(0)];
+                int[] path = new int[graph.GetLength(0)];
+                int pathIndex = 0;
 
-            if (found)
-            {
-                Console.WriteLine("Wierzchołek końcowy osiągnięty");
+                Console.WriteLine("Wykonanie DFS:");
+                long StartingTime = Stopwatch.GetTimestamp();
+                bool found = DFS(graph, 0, visited, path, ref pathIndex);
+
+                if (found)
+                {
+                    Console.WriteLine("Wierzchołek końcowy osiągnięty\n");
+                    long EndingTime = Stopwatch.GetTimestamp();
+                    long ElapsedTime = EndingTime - StartingTime;
+                    Tsuma[i] = ElapsedTime * (1.0 / Stopwatch.Frequency);
+                }
+                else
+                {
+                    Console.WriteLine("Nie znaleziono trasy do wierzchołka końcowego");
+                }
             }
-            else
-            {
-                Console.WriteLine("Nie znaleziono trasy do wierzchołka końcowego");
-            }
+            double avg = Tsuma.Sum() / 12;
+            Console.WriteLine($"Średni czas wykonania: {avg} [s] ");
         }
         else if (choice == 2)
         {
-            bool[] visited = new bool[graph.GetLength(0)];
-            int[] queue = new int[graph.GetLength(0)];
-            int front = 0, rear = 0;
+            double[] Tsuma = new double[12];
+            for (int i = 0; i < 12; i++)
+            {
+                bool[] visited = new bool[graph.GetLength(0)];
+                int[] queue = new int[graph.GetLength(0)];
+                int front = 0, rear = 0;
 
-            Console.WriteLine("Wykonanie BFS:");
-            BFS(graph, 0, visited, queue, ref front, ref rear);
+
+
+                Console.WriteLine("\nWykonanie BFS:");
+                long StartingTime = Stopwatch.GetTimestamp();
+                BFS(graph, 0, visited, queue, ref front, ref rear);
+                long EndingTime = Stopwatch.GetTimestamp();
+                long ElapsedTime = EndingTime - StartingTime;
+                Tsuma[i] = ElapsedTime * (1.0 / Stopwatch.Frequency);
+            }
+            double avg = Tsuma.Sum() / 12;
+            Console.WriteLine($"Średni czas wykonania: {avg} [s] ");
         }
         else if (choice == 3)
         {
+            double[] Tsuma = new double[12];
             Console.WriteLine("Podaj wierzchołek początkowy (0-7): ");
             int start = int.Parse(Console.ReadLine());
             Console.WriteLine("Podaj wierzchołek końcowy (0-7): ");
             int end = int.Parse(Console.ReadLine());
 
-            Dijkstra(weights, start, end);
+            for (int i = 0; i < 12; i++)
+            {
+                long StartingTime = Stopwatch.GetTimestamp();
+                Dijkstra(weights, start, end);
+                long EndingTime = Stopwatch.GetTimestamp();
+                long ElapsedTime = EndingTime - StartingTime;
+                Tsuma[i] = ElapsedTime * (1.0 / Stopwatch.Frequency);
+            }
+
+            double avg = Tsuma.Sum() / 12;
+            Console.WriteLine($"Średni czas wykonania: {avg} [s] ");
         }
         else
         {
@@ -165,7 +200,17 @@ class Program
 
         for (int count = 0; count < weights.GetLength(0) - 1; count++)
         {
-            int u = MinDistance(dist, sptSet);
+            int min = int.MaxValue, minIndex = -1;
+            for (int v = 0; v < dist.Length; v++)
+            {
+                if (!sptSet[v] && dist[v] <= min)
+                {
+                    min = dist[v];
+                    minIndex = v;
+                }
+            }
+
+            int u = minIndex;
             sptSet[u] = true;
 
             for (int v = 0; v < weights.GetLength(1); v++)
@@ -178,27 +223,6 @@ class Program
             }
         }
 
-        PrintSolution(dist, parent, end);
-    }
-
-    static int MinDistance(int[] dist, bool[] sptSet)
-    {
-        int min = int.MaxValue, minIndex = -1;
-
-        for (int v = 0; v < dist.Length; v++)
-        {
-            if (!sptSet[v] && dist[v] <= min)
-            {
-                min = dist[v];
-                minIndex = v;
-            }
-        }
-
-        return minIndex;
-    }
-
-    static void PrintSolution(int[] dist, int[] parent, int end)
-    {
         Console.WriteLine($"Koszt najkrótszej trasy z wierzchołka do {end} wynosi: {dist[end]}");
         Console.Write("Najkrótsza trasa: ");
         PrintPath(parent, end);
