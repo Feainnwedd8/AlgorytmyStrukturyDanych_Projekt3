@@ -4,7 +4,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Definiowanie grafu nieskierowanego jako tablicy sąsiedztwa z 8 wierzchołkami
         int[,] graph = new int[,]
         {
             { 0, 1, 1, 0, 0, 0, 0, 1 },
@@ -17,8 +16,7 @@ class Program
             { 7, 0, 0, 0, 0, 1, 0, 0 }  
         };
 
-        // Wizualizacja grafu nieskierowanego
-        Console.WriteLine("Wizualizacja grafu nieskierowanego:");
+        Console.WriteLine("Graf nieskierowany:");
         for (int i = 0; i < graph.GetLength(0); i++)
         {
             Console.Write($"{i}: ");
@@ -32,21 +30,19 @@ class Program
             Console.WriteLine();
         }
 
-        // Definiowanie grafu skierowanego z wagami
         int[,] weights = new int[,]
         {
-            { 0, 10, 20, 0, 0, 0, 0, 5 }, // Wagi dla wierzchołka 0
-            { 10, 0, 0, 15, 25, 0, 0, 0 }, // Wagi dla wierzchołka 1
-            { 20, 0, 0, 0, 0, 30, 0, 0 }, // Wagi dla wierzchołka 2
-            { 0, 15, 0, 0, 0, 0, 10, 0 }, // Wagi dla wierzchołka 3
-            { 0, 25, 0, 0, 0, 0, 0, 20 }, // Wagi dla wierzchołka 4
-            { 0, 0, 30, 0, 0, 0, 0, 10 }, // Wagi dla wierzchołka 5
-            { 0, 0, 0, 10, 0, 0, 0, 0 }, // Wagi dla wierzchołka 6
-            { 5, 0, 0, 0, 20, 0, 0, 0 }  // Wagi dla wierzchołka 7
+            { 0, 10, 20, 0, 0, 0, 0, 5 },
+            { 10, 0, 0, 15, 25, 0, 0, 0 },
+            { 20, 0, 0, 0, 0, 30, 0, 0 },
+            { 0, 15, 0, 0, 0, 0, 10, 0 },
+            { 0, 25, 0, 0, 0, 0, 0, 20 },
+            { 0, 0, 30, 0, 0, 0, 0, 10 },
+            { 0, 0, 0, 10, 0, 0, 0, 0 },
+            { 5, 0, 0, 0, 20, 0, 0, 0 }
         };
 
-        // Wizualizacja grafu skierowanego z wagami
-        Console.WriteLine("\nWizualizacja grafu skierowanego z wagami:");
+        Console.WriteLine("\nGrafu skierowanyo z wagami:");
         for (int i = 0; i < weights.GetLength(0); i++)
         {
             Console.Write($"{i}: ");
@@ -60,7 +56,6 @@ class Program
             Console.WriteLine();
         }
 
-        // Wybór algorytmu
         Console.WriteLine("Wybierz algorytm (1 - DFS, 2 - BFS, 3 - Dijkstra): ");
         int choice = int.Parse(Console.ReadLine());
 
@@ -71,15 +66,15 @@ class Program
             int pathIndex = 0;
 
             Console.WriteLine("Wykonanie DFS:");
-            bool found = DFS(graph, 0, visited, path, ref pathIndex); // Zawsze startujemy od 0
+            bool found = DFS(graph, 0, visited, path, ref pathIndex);
 
             if (found)
             {
-                Console.WriteLine("Dotarliśmy do wierzchołka końcowego.");
+                Console.WriteLine("Wierzchołek końcowy osiągnięty");
             }
             else
             {
-                Console.WriteLine("Nie znaleziono trasy do wierzchołka końcowego.");
+                Console.WriteLine("Nie znaleziono trasy do wierzchołka końcowego");
             }
         }
         else if (choice == 2)
@@ -89,7 +84,7 @@ class Program
             int front = 0, rear = 0;
 
             Console.WriteLine("Wykonanie BFS:");
-            BFS(graph, 0, visited, queue, ref front, ref rear); // Zawsze startujemy od 0
+            BFS(graph, 0, visited, queue, ref front, ref rear);
         }
         else if (choice == 3)
         {
@@ -109,13 +104,12 @@ class Program
     static bool DFS(int[,] graph, int current, bool[] visited, int[] path, ref int pathIndex)
     {
         visited[current] = true;
-        path[pathIndex++] = current; // Zapisz wierzchołek w ścieżce
+        path[pathIndex++] = current;
         Console.WriteLine($"Odwiedzono wierzchołek: {current}");
 
-        // Sprawdzenie, czy dotarliśmy do ostatniego wierzchołka
         if (current == graph.GetLength(0) - 1)
         {
-            return true; // Dotarliśmy do końca
+            return true;
         }
 
         for (int neighbor = 0; neighbor < graph.GetLength(1); neighbor++)
@@ -124,23 +118,23 @@ class Program
             {
                 if (DFS(graph, neighbor, visited, path, ref pathIndex))
                 {
-                    return true; // Zwróć, jeśli dotarłeś do końca
+                    return true;
                 }
             }
         }
 
-        pathIndex--; // Cofnij indeks, jeśli nie znaleziono ścieżki
-        return false; // Nie znaleziono ścieżki
+        pathIndex--;
+        return false;
     }
 
     static void BFS(int[,] graph, int start, bool[] visited, int[] queue, ref int front, ref int rear)
     {
         visited[start] = true;
-        queue[rear++] = start; // Dodaj wierzchołek startowy do kolejki
+        queue[rear++] = start;
 
         while (front < rear)
         {
-            int current = queue[front++]; // Pobierz wierzchołek z przodu kolejki
+            int current = queue[front++];
             Console.WriteLine($"Odwiedzono wierzchołek: {current}");
 
             for (int neighbor = 0; neighbor < graph.GetLength(1); neighbor++)
@@ -148,7 +142,7 @@ class Program
                 if (graph[current, neighbor] == 1 && !visited[neighbor])
                 {
                     visited[neighbor] = true;
-                    queue[rear++] = neighbor; // Dodaj sąsiada do kolejki
+                    queue[rear++] = neighbor;
                 }
             }
         }
