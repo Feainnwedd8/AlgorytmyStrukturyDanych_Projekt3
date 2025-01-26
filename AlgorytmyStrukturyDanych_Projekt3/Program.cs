@@ -7,14 +7,14 @@ class Program
         // Definiowanie grafu nieskierowanego jako tablicy sąsiedztwa z 8 wierzchołkami
         int[,] graph = new int[,]
         {
-            { 0, 1, 1, 0, 0, 0, 0, 1 }, // Wierzchołek 0 połączony z 1, 2 i 7
-            { 1, 0, 0, 1, 1, 0, 0, 0 }, // Wierzchołek 1 połączony z 0, 3 i 4
-            { 2, 1, 0, 0, 1, 0, 0, 0 }, // Wierzchołek 2 połączony z 0 i 4
-            { 3, 0, 0, 0, 1, 1, 0, 0 }, // Wierzchołek 3 połączony z 1 i 4
-            { 4, 0, 1, 1, 0, 0, 1, 0 }, // Wierzchołek 4 połączony z 1, 2 i 6
-            { 5, 0, 0, 1, 0, 0, 0, 1 }, // Wierzchołek 5 połączony z 3 i 7
-            { 6, 0, 0, 0, 1, 0, 0, 0 }, // Wierzchołek 6 połączony z 4
-            { 7, 0, 0, 0, 0, 1, 0, 0 }  // Wierzchołek 7 połączony z 5
+            { 0, 1, 1, 0, 0, 0, 0, 1 },
+            { 1, 0, 0, 1, 1, 0, 0, 0 },
+            { 2, 1, 0, 0, 1, 0, 0, 0 },
+            { 3, 0, 0, 0, 1, 1, 0, 0 }, 
+            { 4, 0, 1, 1, 0, 0, 1, 0 },
+            { 5, 0, 0, 1, 0, 0, 0, 1 }, 
+            { 6, 0, 0, 0, 1, 0, 0, 0 }, 
+            { 7, 0, 0, 0, 0, 1, 0, 0 }  
         };
 
         // Wizualizacja grafu nieskierowanego
